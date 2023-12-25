@@ -1,14 +1,13 @@
 package com.matheus0liveira.rickandmorty.view
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
@@ -23,11 +22,13 @@ class MainActivity : ComponentActivity(), CharacterView {
     private lateinit var presenter: CharacterPresenter
     private lateinit var adapter: MainAdapter
     private lateinit var characters: MutableList<Character>
+    private lateinit var progressBar: FrameLayout
     private var currentPage = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         presenter = CharacterPresenter(this)
+        progressBar = findViewById(R.id.progress_overlay)
 
         characters = mutableListOf()
         presenter.findAllCharacters(currentPage)
@@ -116,11 +117,11 @@ class MainActivity : ComponentActivity(), CharacterView {
     }
 
     override fun showProgress() {
-        TODO("Not yet implemented")
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        TODO("Not yet implemented")
+        progressBar.visibility = View.GONE
     }
 
     override fun showError(message: String) {

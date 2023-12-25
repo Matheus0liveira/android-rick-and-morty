@@ -12,7 +12,7 @@ class CharacterPresenter(
     private val dataSource: CharacterDataSource = CharacterDataSource(),
 ) {
     fun findAllCharacters(currentPage: Int = 1) {
-
+        callback.showProgress()
         dataSource.findAllCharacters(currentPage, object : CharacterCallback {
             override fun onSuccess(characters: CharacterAPI, info: Info) {
                 val character = characters.results.map {
@@ -27,9 +27,13 @@ class CharacterPresenter(
                 }
                 callback.showCharacter(character)
                 callback.handleInfo(info)
+                callback.hideProgress()
             }
 
-            override fun onError(message: String) = callback.showError(message)
+            override fun onError(message: String) {
+                callback.showError(message)
+                callback.hideProgress()
+            }
 
         })
     }
