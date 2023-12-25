@@ -10,40 +10,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
 import com.matheus0liveira.rickandmorty.model.Character
+import com.matheus0liveira.rickandmorty.presenter.CharacterPresenter
+import com.matheus0liveira.rickandmorty.presenter.CharacterView
 import com.squareup.picasso.Picasso
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), CharacterView {
+
+    private lateinit var presenter: CharacterPresenter
+    private lateinit var adapter: MainAdapter
+    private lateinit var characters: MutableList<Character>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        presenter = CharacterPresenter(this)
 
-        val characters = mutableListOf<Character>()
+        characters = mutableListOf()
+        presenter.findAllCharacters()
 
-
-        characters.add(
-            Character(
-                id = 1,
-                name = "Rick Sanchez",
-                status = "Alive",
-                origin = "Earth",
-                specie = "Human",
-                imgUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-
-            )
-        )
-        characters.add(
-            Character(
-                id = 1,
-                name = "Morty Smith",
-                status = "Alive",
-                origin = "Earth",
-                specie = "Human",
-                imgUrl = "https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-
-            )
-        )
-
-        val adapter = MainAdapter(characters)
+        adapter = MainAdapter(characters)
         val rv = findViewById<RecyclerView>(R.id.rv_main)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
@@ -72,9 +56,9 @@ class MainActivity : ComponentActivity() {
                 val txtSpecie = itemView.findViewById<TextView>(R.id.character_specie)
                 val txtStatus = itemView.findViewById<TextView>(R.id.character_status)
                 val imgView = itemView.findViewById<ImageView>(R.id.character_img)
-
+                imgView.clipToOutline = true
                 Picasso.get().load(character.imgUrl).into(imgView);
-                txtName.text = character.name.uppercase()
+                txtName.text = character.name
                 txtSpecie.text = getString(R.string.specie, character.specie)
                 txtOrigin.text = getString(R.string.location, character.origin)
                 txtStatus.text = getString(R.string.status, character.status)
@@ -83,6 +67,23 @@ class MainActivity : ComponentActivity() {
 
         }
 
+    }
+
+    override fun showCharacter(character: List<Character>) {
+        characters.addAll(character)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun showProgress() {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideProgress() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showError(message: String) {
+        TODO("Not yet implemented")
     }
 }
 
