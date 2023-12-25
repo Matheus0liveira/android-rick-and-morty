@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.RickAndMorty" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.RickAndMorty" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/dark_blue</item>
+        <item name="android:statusBarColor">@color/dark_blue</item>
+        <item name="android:windowBackground">@color/off_white</item>
+
+    </style>
+
+    <style name="Theme.RickAndMorty.AppbarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="Theme.RickAndMorty.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 </resources>
