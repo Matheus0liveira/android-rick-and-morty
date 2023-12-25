@@ -11,5 +11,10 @@
 
     <style name="Theme.RickAndMorty.AppbarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="Theme.RickAndMorty.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="Theme.RickAndMorty.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+
+        <item name="colorOnPrimary">@color/off_white</item>
+    </style>
+
+
 </resources>

@@ -9,5 +9,8 @@ import retrofit2.http.Query
 interface RickAndMortyAPI {
 
     @GET("character")
-    fun findAllCharacters(@Query("page") currentPage: Int = 1): Call<CharacterAPI>
+    fun findAllCharacters(
+        @Query("page") currentPage: Int = 1,
+        @Query("name") name: String? = ""
+    ): Call<CharacterAPI>
 }

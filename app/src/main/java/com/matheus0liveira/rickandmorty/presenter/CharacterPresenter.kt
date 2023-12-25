@@ -11,9 +11,9 @@ class CharacterPresenter(
     private val callback: CharacterView,
     private val dataSource: CharacterDataSource = CharacterDataSource(),
 ) {
-    fun findAllCharacters(currentPage: Int = 1) {
+    fun findAllCharacters(currentPage: Int = 1, searchName: String? = "") {
         callback.showProgress()
-        dataSource.findAllCharacters(currentPage, object : CharacterCallback {
+        dataSource.findAllCharacters(currentPage, searchName, object : CharacterCallback {
             override fun onSuccess(characters: CharacterAPI, info: Info) {
                 val character = characters.results.map {
                     Character(

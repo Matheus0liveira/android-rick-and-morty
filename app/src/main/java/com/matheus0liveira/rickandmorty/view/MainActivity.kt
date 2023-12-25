@@ -1,13 +1,21 @@
 package com.matheus0liveira.rickandmorty.view
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
@@ -17,16 +25,21 @@ import com.matheus0liveira.rickandmorty.presenter.CharacterPresenter
 import com.matheus0liveira.rickandmorty.presenter.CharacterView
 import com.squareup.picasso.Picasso
 
-class MainActivity : ComponentActivity(), CharacterView {
+class MainActivity : AppCompatActivity(), CharacterView, SearchView.OnQueryTextListener {
 
     private lateinit var presenter: CharacterPresenter
     private lateinit var adapter: MainAdapter
     private lateinit var characters: MutableList<Character>
     private lateinit var progressBar: FrameLayout
+    private lateinit var searchText: EditText
     private var currentPage = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar);
+        setSupportActionBar(toolbar)
+
+
         presenter = CharacterPresenter(this)
         progressBar = findViewById(R.id.progress_overlay)
 
@@ -38,6 +51,30 @@ class MainActivity : ComponentActivity(), CharacterView {
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+
+        searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+        searchText.setTextColor(getColor(R.color.off_white))
+
+        searchView.setOnQueryTextListener(this);
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_refresh -> {
+                presenter.findAllCharacters(1, "")
+                return true
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -127,5 +164,16 @@ class MainActivity : ComponentActivity(), CharacterView {
     override fun showError(message: String) {
         TODO("Not yet implemented")
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        presenter.findAllCharacters(currentPage, query)
+
+        (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(searchText.windowToken, 0)
+
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?) = true
 }
 
