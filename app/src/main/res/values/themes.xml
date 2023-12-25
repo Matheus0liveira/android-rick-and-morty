@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/dark_blue</item>
         <item name="android:statusBarColor">@color/dark_blue</item>
         <item name="android:windowBackground">@color/off_white</item>
+        <item name="colorAccent">@color/dark_blue</item>
 
     </style>
 

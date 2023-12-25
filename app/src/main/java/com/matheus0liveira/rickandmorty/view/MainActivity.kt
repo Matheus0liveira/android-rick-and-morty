@@ -1,15 +1,19 @@
 package com.matheus0liveira.rickandmorty.view
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
 import com.matheus0liveira.rickandmorty.model.Character
+import com.matheus0liveira.rickandmorty.model.Info
 import com.matheus0liveira.rickandmorty.presenter.CharacterPresenter
 import com.matheus0liveira.rickandmorty.presenter.CharacterView
 import com.squareup.picasso.Picasso
@@ -19,13 +23,14 @@ class MainActivity : ComponentActivity(), CharacterView {
     private lateinit var presenter: CharacterPresenter
     private lateinit var adapter: MainAdapter
     private lateinit var characters: MutableList<Character>
+    private var currentPage = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         presenter = CharacterPresenter(this)
 
         characters = mutableListOf()
-        presenter.findAllCharacters()
+        presenter.findAllCharacters(currentPage)
 
         adapter = MainAdapter(characters)
         val rv = findViewById<RecyclerView>(R.id.rv_main)
@@ -70,8 +75,44 @@ class MainActivity : ComponentActivity(), CharacterView {
     }
 
     override fun showCharacter(character: List<Character>) {
+        characters.clear()
         characters.addAll(character)
         adapter.notifyDataSetChanged()
+    }
+
+    override fun handleInfo(info: Info) {
+
+        val prevBtn = findViewById<Button>(R.id.prev_btn)
+        val nextBtn = findViewById<Button>(R.id.next_btn)
+        val txtCurrentPage = findViewById<TextView>(R.id.txt_current_page)
+        txtCurrentPage.text = currentPage.toString()
+        prevBtn.setOnClickListener {
+            --currentPage
+            presenter.findAllCharacters(currentPage)
+        }
+        nextBtn.setOnClickListener {
+            ++currentPage
+            presenter.findAllCharacters(currentPage)
+        }
+
+        prevBtn.setTextColor(resources.getColor(R.color.gray, theme))
+
+        if (info.prev == null) {
+            prevBtn.isEnabled = false
+            prevBtn.setTextColor(resources.getColor(R.color.gray, theme))
+        } else {
+            prevBtn.isEnabled = true
+            prevBtn.setTextColor(resources.getColor(R.color.dark_blue, theme))
+        }
+        if (info.next == null) {
+            nextBtn.isEnabled = false
+            nextBtn.setTextColor(resources.getColor(R.color.gray, theme))
+        } else {
+            nextBtn.isEnabled = true
+            nextBtn.setTextColor(resources.getColor(R.color.dark_blue, theme))
+        }
+
+
     }
 
     override fun showProgress() {

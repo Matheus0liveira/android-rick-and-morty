@@ -3,4 +3,6 @@
     <string name="location">Origem: %1$s</string>
     <string name="specie">Specie: %1$s</string>
     <string name="status">Status: %1$s</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

@@ -10,10 +10,10 @@ import java.lang.RuntimeException
 
 class CharacterDataSource {
 
-    fun findAllCharacters(callback: CharacterCallback) {
+    fun findAllCharacters(currentPage: Int = 1, callback: CharacterCallback) {
         HttpClient.retrofit()
             .create(RickAndMortyAPI::class.java)
-            .findAllCharacters()
+            .findAllCharacters(currentPage)
             .enqueue(
                 object : Callback<CharacterAPI> {
                     override fun onResponse(
@@ -21,7 +21,8 @@ class CharacterDataSource {
                         response: Response<CharacterAPI>
                     ) {
                         callback.onSuccess(
-                            response.body() ?: throw RuntimeException("Characters not found")
+                            response.body() ?: throw RuntimeException("Characters not found"),
+                            response.body()?.info ?: throw RuntimeException("Characters not found")
                         )
                     }
 
