@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/nav_home"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:label="@string/menu_home"
+        android:name="com.matheus0liveira.rickandmorty.view.HomeFragment"
+        tools:layout="@layout/home_fragment" />
+
+
+</navigation>

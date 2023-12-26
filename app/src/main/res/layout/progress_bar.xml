@@ -10,7 +10,7 @@
     android:background="@android:color/black"
     android:clickable="true"
     android:focusable="true"
-    android:visibility="visible">
+    android:visibility="gone">
 
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/progress_wheel"
