@@ -29,7 +29,8 @@ data class Result(
     val gender: String,
     val origin: Location,
     val location: Location,
-    val image: String
+    val image: String,
+    val episodes: List<String>,
 )
 
 data class Location(
@@ -42,3 +43,4 @@ data class CharacterAPI(
     val results: List<Result>,
     val error: String? = null
 )
+

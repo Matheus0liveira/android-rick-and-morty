@@ -92,7 +92,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
         adapter = HomeAdapter(characters) {
 
             val bundle = Bundle()
-            bundle.putInt("id", it.id)
+            bundle.putInt(CharacterFragment.ID_KEY, it.id)
 
             val navController = findNavController()
 

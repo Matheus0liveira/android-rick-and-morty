@@ -10,4 +10,6 @@
     <string name="menu_home">Home</string>
     <string name="social">Social</string>
     <string name="menu_about">Sobre</string>
+    <string name="all_episodes">Todos os epísódios de: %1$s</string>
+    <string name="air_date">Lançado em: %1$s</string>
 </resources>
