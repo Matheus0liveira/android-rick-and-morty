@@ -11,15 +11,11 @@
         android:theme="@style/Theme.RickAndMorty.AppbarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            app:menu="@menu/main_menu"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@color/white"
-            android:background="?attr/colorPrimary"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            app:popupTheme="@style/Theme.RickAndMorty.PopupOverlay"
-            app:title="Ínicio" />
+            app:popupTheme="@style/Theme.RickAndMorty.PopupOverlay" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />

@@ -16,7 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.matheus0liveira.rickandmorty.R
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var searchText: EditText
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -64,17 +64,17 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
-
-        searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
-        searchText.setTextColor(getColor(R.color.off_white))
-
-        searchView.setOnQueryTextListener(this);
-
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.main_menu, menu)
+//        val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+//
+//        searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+//        searchText.setTextColor(getColor(R.color.off_white))
+//
+//        searchView.setOnQueryTextListener(this);
+//
+//        return true
+//    }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //
@@ -177,15 +177,5 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 //        TODO("Not yet implemented")
 //    }
 //
-    override fun onQueryTextSubmit(query: String?): Boolean {
-//        presenter.findAllCharacters(currentPage, query)
-//
-//        (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
-//            .hideSoftInputFromWindow(searchText.windowToken, 0)
-
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?) = true
 }
 

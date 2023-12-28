@@ -1,17 +1,30 @@
 package com.matheus0liveira.rickandmorty.view
 
+import android.app.Activity
+import android.content.ClipData.Item
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
@@ -21,16 +34,18 @@ import com.matheus0liveira.rickandmorty.model.Info
 import com.matheus0liveira.rickandmorty.presenter.CharacterView
 import com.squareup.picasso.Picasso
 
-class HomeFragment : Fragment(), CharacterView {
+class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
+    SearchView.OnQueryTextListener {
 
     private lateinit var presenter: CharacterPresenter
     private lateinit var adapter: MainAdapter
     private lateinit var characters: MutableList<Character>
     private lateinit var progressBar: FrameLayout
-
+    private lateinit var searchText: EditText
     private lateinit var prevBtn: Button
     private lateinit var nextBtn: Button
     private lateinit var txtCurrentPage: TextView
+    private lateinit var footer: LinearLayout
     private var currentPage = 1
 
     override fun onCreateView(
@@ -38,12 +53,36 @@ class HomeFragment : Fragment(), CharacterView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        footer = view.findViewById(R.id.footer)
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+                val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+
+                searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+                searchView.setOnQueryTextListener(this@HomeFragment);
+
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_search -> true
+                    R.id.action_refresh -> true
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
 
         prevBtn = view.findViewById(R.id.prev_btn)
         nextBtn = view.findViewById(R.id.next_btn)
@@ -102,7 +141,7 @@ class HomeFragment : Fragment(), CharacterView {
     }
 
     override fun handleInfo(info: Info) {
-
+        footer.visibility = View.VISIBLE
         txtCurrentPage.text = currentPage.toString()
         prevBtn.setOnClickListener {
             --currentPage
@@ -144,4 +183,13 @@ class HomeFragment : Fragment(), CharacterView {
     override fun showError(message: String) {
         TODO("Not yet implemented")
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        Log.i("UAHSUAHSUSH", "$query")
+        presenter.findAllCharacters(currentPage, query)
+
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?) = true
 }
