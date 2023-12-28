@@ -9,6 +9,7 @@
     android:animateLayoutChanges="true"
     wheel:layout_constraintTop_toTopOf="parent"
     wheel:layout_constraintBottom_toBottomOf="parent"
+    android:visibility="gone"
     android:background="@android:color/black">
 
     <com.pnikosis.materialishprogress.ProgressWheel

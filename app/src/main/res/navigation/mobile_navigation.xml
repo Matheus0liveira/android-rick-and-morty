@@ -9,7 +9,17 @@
         android:id="@+id/nav_home"
         android:label="@string/menu_home"
         android:name="com.matheus0liveira.rickandmorty.view.HomeFragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_nav_home_to_nav_character"
+            app:destination="@id/nav_character" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_character"
+        android:label="@string/menu_home"
+        android:name="com.matheus0liveira.rickandmorty.view.CharacterFragment"
+        tools:layout="@layout/character_fragment" />
 
 
 </navigation>

@@ -12,7 +12,11 @@ import com.matheus0liveira.rickandmorty.R
 import com.matheus0liveira.rickandmorty.model.Character
 import com.squareup.picasso.Picasso
 
-class HomeAdapter(private val items: List<Character>) :
+
+class HomeAdapter(
+    private val items: List<Character>,
+    val onClickListener: ((item: Character) -> Unit)? = null
+) :
     RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -31,13 +35,21 @@ class HomeAdapter(private val items: List<Character>) :
     inner class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(character: Character) {
+
+
+            onClickListener?.let {
+                itemView.setOnClickListener { onClickListener.invoke(character) }
+            }
+
+
             val txtName = itemView.findViewById<TextView>(R.id.character_name)
             val txtOrigin = itemView.findViewById<TextView>(R.id.character_origin)
             val txtSpecie = itemView.findViewById<TextView>(R.id.character_specie)
             val txtStatus = itemView.findViewById<TextView>(R.id.character_status)
             val imgView = itemView.findViewById<ImageView>(R.id.character_img)
 
-            
+
+
             imgView.clipToOutline = true
             Picasso.get().load(character.imgUrl).into(imgView);
             txtName.text = character.name

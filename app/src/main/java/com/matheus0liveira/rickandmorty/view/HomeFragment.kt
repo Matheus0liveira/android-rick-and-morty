@@ -1,10 +1,7 @@
 package com.matheus0liveira.rickandmorty.view
 
-import android.app.Activity
-import android.content.ClipData.Item
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -15,33 +12,30 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.matheus0liveira.rickandmorty.R
-import com.matheus0liveira.rickandmorty.presenter.CharacterPresenter
 import com.matheus0liveira.rickandmorty.model.Character
 import com.matheus0liveira.rickandmorty.model.Info
+import com.matheus0liveira.rickandmorty.presenter.CharacterPresenter
 import com.matheus0liveira.rickandmorty.presenter.CharacterView
-import com.squareup.picasso.Picasso
+
 
 class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     SearchView.OnQueryTextListener {
 
     private lateinit var presenter: CharacterPresenter
     private lateinit var adapter: HomeAdapter
-    private lateinit var characters: MutableList<Character>
+    private val characters: MutableList<Character> = mutableListOf()
     private lateinit var progressBar: FrameLayout
     private lateinit var searchText: EditText
     private lateinit var prevBtn: Button
@@ -92,10 +86,20 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
 
 
         presenter = CharacterPresenter(this)
-        characters = mutableListOf()
-        presenter.findAllCharacters(currentPage)
 
-        adapter = HomeAdapter(characters)
+        if (characters.size == 0) presenter.findAllCharacters(currentPage)
+
+        adapter = HomeAdapter(characters) {
+
+            val bundle = Bundle()
+            bundle.putInt("id", it.id)
+
+            val navController = findNavController()
+
+            navController.navigate(R.id.action_nav_home_to_nav_character, bundle)
+        }
+
+
         val rv = view.findViewById<RecyclerView>(R.id.rv_main)
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
