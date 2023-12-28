@@ -2,6 +2,7 @@ package com.matheus0liveira.rickandmorty.view
 
 import android.app.Activity
 import android.content.ClipData.Item
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -38,7 +40,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     SearchView.OnQueryTextListener {
 
     private lateinit var presenter: CharacterPresenter
-    private lateinit var adapter: MainAdapter
+    private lateinit var adapter: HomeAdapter
     private lateinit var characters: MutableList<Character>
     private lateinit var progressBar: FrameLayout
     private lateinit var searchText: EditText
@@ -46,6 +48,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     private lateinit var nextBtn: Button
     private lateinit var txtCurrentPage: TextView
     private lateinit var footer: LinearLayout
+    private lateinit var searchView: SearchView
     private var currentPage = 1
 
     override fun onCreateView(
@@ -53,8 +56,6 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
@@ -67,7 +68,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.main_menu, menu)
-                val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+                searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
 
                 searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
                 searchView.setOnQueryTextListener(this@HomeFragment);
@@ -94,44 +95,22 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
         characters = mutableListOf()
         presenter.findAllCharacters(currentPage)
 
-        adapter = MainAdapter(characters)
+        adapter = HomeAdapter(characters)
         val rv = view.findViewById<RecyclerView>(R.id.rv_main)
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
     }
 
-    inner class MainAdapter(private val items: List<Character>) :
-        RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-            val view = layoutInflater.inflate(R.layout.character_item, parent, false)
-            return MainViewHolder(view)
-        }
 
-        override fun getItemCount() = items.size
-        override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-            holder.bind(items[position])
-        }
+    private fun closeSearchViewOnToolbar() {
+        searchView.onActionViewCollapsed();
 
-        inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    }
 
-            fun bind(character: Character) {
+    private fun closeKeyboard() {
 
-                val txtName = itemView.findViewById<TextView>(R.id.character_name)
-                val txtOrigin = itemView.findViewById<TextView>(R.id.character_origin)
-                val txtSpecie = itemView.findViewById<TextView>(R.id.character_specie)
-                val txtStatus = itemView.findViewById<TextView>(R.id.character_status)
-                val imgView = itemView.findViewById<ImageView>(R.id.character_img)
-                imgView.clipToOutline = true
-                Picasso.get().load(character.imgUrl).into(imgView);
-                txtName.text = character.name
-                txtSpecie.text = getString(R.string.specie, character.specie)
-                txtOrigin.text = getString(R.string.location, character.origin)
-                txtStatus.text = getString(R.string.status, character.status)
-
-            }
-
-        }
-
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     override fun showCharacter(character: List<Character>) {
@@ -181,11 +160,12 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     }
 
     override fun showError(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        closeKeyboard()
+        closeSearchViewOnToolbar()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        Log.i("UAHSUAHSUSH", "$query")
         presenter.findAllCharacters(currentPage, query)
 
         return true

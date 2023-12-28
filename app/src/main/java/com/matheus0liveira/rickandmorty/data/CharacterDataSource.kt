@@ -1,7 +1,5 @@
 package com.matheus0liveira.rickandmorty.data
 
-import android.util.Log
-import com.matheus0liveira.rickandmorty.model.Character
 import com.matheus0liveira.rickandmorty.model.CharacterAPI
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,9 +18,16 @@ class CharacterDataSource {
                         call: Call<CharacterAPI>,
                         response: Response<CharacterAPI>
                     ) {
+                        val error = response.errorBody()?.toString()
+                        if (error != null) {
+                            callback.onError("Characters not found")
+                            return
+                        }
+
                         callback.onSuccess(
                             response.body() ?: throw RuntimeException("Characters not found"),
-                            response.body()?.info ?: throw RuntimeException("Characters not found")
+                            response.body()?.info
+                                ?: throw RuntimeException("Characters not found")
                         )
                     }
 

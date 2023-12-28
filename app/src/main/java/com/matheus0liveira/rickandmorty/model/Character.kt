@@ -39,5 +39,6 @@ data class Location(
 
 data class CharacterAPI(
     val info: Info,
-    val results: List<Result>
+    val results: List<Result>,
+    val error: String? = null
 )
