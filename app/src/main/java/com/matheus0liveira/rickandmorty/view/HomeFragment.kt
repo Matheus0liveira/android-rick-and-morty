@@ -57,6 +57,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         footer = view.findViewById(R.id.footer)
+
         val menuHost: MenuHost = requireActivity()
 
         menuHost.addMenuProvider(object : MenuProvider {
@@ -71,8 +72,12 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.action_search -> true
-                    R.id.action_refresh -> true
+                    R.id.action_refresh -> {
+                        currentPage = 1
+                        presenter.findAllCharacters(currentPage)
+                        return true
+                    }
+
                     else -> false
                 }
             }
@@ -112,7 +117,6 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
     }
 
     private fun closeKeyboard() {
-
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
@@ -121,6 +125,8 @@ class HomeFragment : Fragment(R.layout.home_fragment), CharacterView,
         characters.clear()
         characters.addAll(character)
         adapter.notifyDataSetChanged()
+        closeKeyboard()
+        closeSearchViewOnToolbar()
     }
 
     override fun handleInfo(info: Info) {

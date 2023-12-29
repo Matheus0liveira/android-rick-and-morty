@@ -1,10 +1,7 @@
 package com.matheus0liveira.rickandmorty.view
 
 import android.os.Bundle
-import android.view.Menu
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -18,7 +15,6 @@ import com.matheus0liveira.rickandmorty.R
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var searchText: EditText
     private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_about, R.id.nav_character
+                R.id.nav_home, R.id.nav_about,
             ), drawerLayout
         )
 
