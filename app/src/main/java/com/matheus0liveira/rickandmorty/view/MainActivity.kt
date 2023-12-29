@@ -3,6 +3,7 @@ package com.matheus0liveira.rickandmorty.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,7 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_RickAndMorty)
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContentView(R.layout.main_activity)
         val toolbar = findViewById<Toolbar>(R.id.toolbar);
         setSupportActionBar(toolbar)
